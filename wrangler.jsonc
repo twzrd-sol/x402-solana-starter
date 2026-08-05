@@ -1,0 +1,26 @@
+{
+  // x402 Solana starter — machine-payable Worker (HTTP 402 + USDC on Solana mainnet).
+  // Sells one example route (GET /report, $0.01) plus free discovery (/, /health,
+  // /.well-known/x402, /openapi.json). X402_PAY_TO is a secret (your Solana pubkey);
+  // never commit it as a plaintext var.
+  "name": "x402-solana-starter",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-05",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
+  "vars": {
+    // CAIP-2 Solana mainnet. Documentation only — NETWORK is fixed in src/x402guard.ts.
+    "X402_NETWORK": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+    // TWZRD Path-B facilitator (gas sponsorship feePayer 4LkEFj…, free merchant_card,
+    // signed receipts on settle). Swap for any x402-compatible facilitator URL if needed.
+    "X402_FACILITATOR_URL": "https://intel.twzrd.xyz",
+    // Free TWZRD intel base used by the seller-side settle guard (payer wash screen).
+    "TWZRD_INTEL_BASE": "https://intel.twzrd.xyz"
+    // X402_PAY_TO is NOT here — set at deploy time:
+    //   printf '%s' "YourSolanaPubkey" | npx wrangler secret put X402_PAY_TO
+  }
+}

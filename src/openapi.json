@@ -1,0 +1,62 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "x402 Solana starter",
+    "version": "1.0.0",
+    "description": "A minimal, deploy-your-own machine-payable API. Pay with HTTP 402 + USDC on Solana mainnet. Facilitator and payer settle-guard pre-wired to TWZRD."
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Liveness check",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string" },
+                    "network": { "type": "string" },
+                    "facilitator": { "type": "string" },
+                    "payToConfigured": { "type": "boolean" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/report": {
+      "get": {
+        "summary": "A tiny generated status report (the one paid route this starter ships with)",
+        "x-x402-price": "$0.01",
+        "x-x402-network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+        "responses": {
+          "200": {
+            "description": "Report JSON, returned once payment settles.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "report": { "type": "string" },
+                    "generatedAt": { "type": "string", "format": "date-time" }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required — x402 PaymentRequirements challenge. See https://x402.org."
+          },
+          "503": {
+            "description": "X402_PAY_TO not configured on this deployment yet."
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,6 @@
+# Secrets for local `wrangler dev`. Copy to `.dev.vars` (gitignored) and fill in.
+# For production: printf '%s' "YourSolanaPubkey" | npx wrangler secret put X402_PAY_TO
+
+# Your public Solana wallet address (base58) — where USDC lands.
+# Never a private key. Any wallet that can hold Solana USDC (Phantom, Solflare, etc.).
+X402_PAY_TO=YourSolanaPubkeyHere
