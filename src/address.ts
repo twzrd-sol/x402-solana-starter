@@ -4,5 +4,13 @@
 const SOLANA_ADDRESS_RE = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
 
 export function isSolanaAddress(value: string | undefined | null): value is string {
-  return typeof value === "string" && SOLANA_ADDRESS_RE.test(value);
+  if (typeof value !== "string") return false;
+  return SOLANA_ADDRESS_RE.test(value.trim());
+}
+
+/** Normalized Solana payTo, or null if missing/invalid. */
+export function normalizePayTo(value: string | undefined | null): string | null {
+  if (typeof value !== "string") return null;
+  const trimmed = value.trim();
+  return SOLANA_ADDRESS_RE.test(trimmed) ? trimmed : null;
 }
