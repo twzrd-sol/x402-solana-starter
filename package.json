@@ -1,0 +1,54 @@
+{
+  "name": "x402-solana-starter",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Deploy-your-own Cloudflare Worker that sells one API route via x402 (HTTP 402 + USDC on Solana). TWZRD facilitator + payer settle-guard pre-wired. One click, MIT.",
+  "type": "module",
+  "license": "MIT",
+  "repository": "github:twzrd-sol/x402-solana-starter",
+  "keywords": [
+    "x402",
+    "http-402",
+    "agentic-commerce",
+    "cloudflare-workers",
+    "usdc",
+    "solana",
+    "twzrd"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "dev": "wrangler dev",
+    "deploy": "npm run typecheck && npm test && wrangler deploy",
+    "dry-run": "npm run typecheck && wrangler deploy --dry-run"
+  },
+  "dependencies": {
+    "@solana/kit": "^5.1.0",
+    "@x402/core": "^2.21.0",
+    "@x402/hono": "^2.21.0",
+    "@x402/svm": "^2.21.0",
+    "hono": "^4.12.28",
+    "twzrd-x402-gate": "^0.8.13"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.0.0",
+    "@types/node": "^22.13.4",
+    "typescript": "^5.8.0",
+    "vitest": "^3.0.5",
+    "wrangler": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "cloudflare": {
+    "label": "x402 Solana Starter (TWZRD)",
+    "products": ["Workers"],
+    "categories": ["starter"],
+    "docs_url": "https://intel.twzrd.xyz/llms.txt",
+    "bindings": {
+      "X402_PAY_TO": {
+        "description": "Your **Solana** public wallet address (base58) — where USDC payments land. Generate with any Solana wallet (Phantom, Solflare, etc.). Public address only; never a private key."
+      }
+    }
+  }
+}
