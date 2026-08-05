@@ -9,7 +9,7 @@ Payment Required` + **USDC on Solana mainnet** — with:
 | Pre-wired default | Why |
 |---|---|
 | **TWZRD facilitator** (`https://intel.twzrd.xyz`) | Gas-sponsored settles (`feePayer` `4LkEFj…`), free merchant cards, signed receipts |
-| **`twzrd-x402-gate` settle guard** | Screens payers for wash/sybil before settle+serve (advisory, fail-open) |
+| **TWZRD settle guard** | Screens payers via free `merchant_card` for wash/sybil before settle+serve (advisory, fail-open; Workers-safe, no Node `createRequire`) |
 | Free discovery | `GET /`, `GET /.well-known/x402`, `GET /openapi.json`, `GET /health` |
 
 No login, no API key, no human checkout. A buyer needs a Solana wallet and USDC.
@@ -90,7 +90,7 @@ console.log(await res.json());
 | Network | `solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp` (mainnet) | fixed in code |
 | Facilitator | `https://intel.twzrd.xyz` | `X402_FACILITATOR_URL` var |
 | Fee payer | `4LkEFjJdXARkKx8FBx4LBFa2SvJNmjQpgGDLoJcypZUE` | from facilitator `/supported` |
-| Settle guard | `twzrd-x402-gate` free `merchant_card` screen | `TWZRD_INTEL_BASE` var |
+| Settle guard | free `GET /v1/intel/merchant_card/{payer}` (in-Worker) | `TWZRD_INTEL_BASE` var |
 | Price | `$0.01` | `src/resources.ts` |
 
 ## Troubleshooting
