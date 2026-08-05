@@ -22,7 +22,7 @@ app.get("/health", (c) =>
     facilitator: c.env.X402_FACILITATOR_URL || DEFAULT_FACILITATOR_URL,
     feePayer: TWZRD_FEE_PAYER,
     payToConfigured: isSolanaAddress(c.env.X402_PAY_TO),
-    settleGuard: "twzrd-x402-gate",
+    settleGuard: "twzrd-merchant-card",
   }),
 );
 
@@ -44,7 +44,7 @@ app.get(REPORT_ROUTE.path, (c) =>
     poweredBy: {
       protocol: "x402 v2",
       facilitator: c.env.X402_FACILITATOR_URL || DEFAULT_FACILITATOR_URL,
-      settleGuard: "twzrd-x402-gate",
+      settleGuard: "twzrd-merchant-card",
     },
   }),
 );

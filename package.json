@@ -27,8 +27,7 @@
     "@x402/core": "^2.21.0",
     "@x402/hono": "^2.21.0",
     "@x402/svm": "^2.21.0",
-    "hono": "^4.12.28",
-    "twzrd-x402-gate": "^0.8.13"
+    "hono": "^4.12.28"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^5.0.0",
@@ -42,8 +41,12 @@
   },
   "cloudflare": {
     "label": "x402 Solana Starter (TWZRD)",
-    "products": ["Workers"],
-    "categories": ["starter"],
+    "products": [
+      "Workers"
+    ],
+    "categories": [
+      "starter"
+    ],
     "docs_url": "https://intel.twzrd.xyz/llms.txt",
     "bindings": {
       "X402_PAY_TO": {

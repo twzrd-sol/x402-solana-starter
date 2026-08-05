@@ -12,7 +12,7 @@ describe("free routes", () => {
     expect(body.status).toBe("ok");
     expect(body.network).toBe(NETWORK);
     expect(body.payToConfigured).toBe(false);
-    expect(body.settleGuard).toBe("twzrd-x402-gate");
+    expect(body.settleGuard).toBe("twzrd-merchant-card");
   });
 
   it("GET / returns the v2 discovery catalog, unauthenticated", async () => {

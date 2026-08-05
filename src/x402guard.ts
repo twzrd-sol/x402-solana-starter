@@ -27,7 +27,7 @@ import type {
   VerifyResponse,
 } from "@x402/core/types";
 import { registerExactSvmScheme } from "@x402/svm/exact/server";
-import { createTwzrdSettleGuard, twzrdPayerScreen } from "twzrd-x402-gate";
+import { createTwzrdSettleGuard } from "./settle-guard.js";
 import { buildRoutesConfig } from "./resources.js";
 import { isSolanaAddress } from "./address.js";
 import type { Env } from "./types.js";
@@ -92,10 +92,10 @@ export function x402Guard(): MiddlewareHandler<{ Bindings: Env }> {
       registerExactSvmScheme(server);
       // Seller-side: refuse to settle wash/sybil payers (advisory + fail-open).
       // TWZRD is not in the settlement path — timeout/error continues.
-      // Cast: twzrd-x402-gate uses a structural SettleGuardContext (index signature)
-      // that is a supertype of @x402/core SettleContext at runtime.
+      // Implemented in-repo (src/settle-guard.ts) so workerd never loads
+      // twzrd-x402-gate's node:module createRequire entry path.
       const settleGuard = createTwzrdSettleGuard({
-        screen: twzrdPayerScreen({ intelBase }),
+        intelBase,
         onDecision: (info) => {
           console.log(
             JSON.stringify({
@@ -107,9 +107,7 @@ export function x402Guard(): MiddlewareHandler<{ Bindings: Env }> {
           );
         },
       });
-      server.onBeforeSettle((ctx) =>
-        settleGuard(ctx as unknown as Parameters<typeof settleGuard>[0]),
-      );
+      server.onBeforeSettle((ctx) => settleGuard(ctx));
       cachedMiddleware = paymentMiddleware(buildRoutesConfig(NETWORK, payTo), server);
     }
 
