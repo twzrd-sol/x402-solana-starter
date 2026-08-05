@@ -1,6 +1,6 @@
 import { ExactSvmScheme } from "@x402/svm/exact/server";
 import { NETWORK, TWZRD_FEE_PAYER } from "./x402guard.js";
-import { isSolanaAddress } from "./address.js";
+import { normalizePayTo } from "./address.js";
 import { REPORT_ROUTE } from "./resources.js";
 import type { Env } from "./types.js";
 
@@ -39,7 +39,7 @@ export interface Catalog {
 }
 
 export async function buildCatalog(env: Env, origin: string): Promise<Catalog> {
-  const payTo = isSolanaAddress(env.X402_PAY_TO) ? env.X402_PAY_TO : null;
+  const payTo = normalizePayTo(env.X402_PAY_TO);
   const resourceUrl = `${origin}${REPORT_ROUTE.path}`;
   const facilitator = env.X402_FACILITATOR_URL || "https://intel.twzrd.xyz";
 

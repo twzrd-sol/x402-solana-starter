@@ -29,7 +29,7 @@ import type {
 import { registerExactSvmScheme } from "@x402/svm/exact/server";
 import { createTwzrdSettleGuard } from "./settle-guard.js";
 import { buildRoutesConfig } from "./resources.js";
-import { isSolanaAddress } from "./address.js";
+import { normalizePayTo } from "./address.js";
 import type { Env } from "./types.js";
 
 /** TWZRD Path-B facilitator — gas sponsorship feePayer 4LkEFj… */
@@ -71,8 +71,8 @@ export function x402Guard(): MiddlewareHandler<{ Bindings: Env }> {
       return next();
     }
 
-    const payTo = c.env.X402_PAY_TO;
-    if (!isSolanaAddress(payTo)) {
+    const payTo = normalizePayTo(c.env.X402_PAY_TO);
+    if (!payTo) {
       return c.json(
         {
           error: "payments_not_configured",
