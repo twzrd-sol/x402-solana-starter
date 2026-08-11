@@ -144,7 +144,8 @@ console.log(await res.json());
 | Stock `x402.org/facilitator` cannot supply a feePayer for Solana mainnet | **Proven** (`npm run smoke:contrast`) |
 | Unconfigured deploy refuses (`503`) instead of misrouting payment | **Proven** (`npm run smoke`) |
 | Settle guard screens payers via `merchant_card` before serving | **Proven** by unit test (`test/settle-guard.test.ts`), not yet by a live wash-flagged payer |
-| Full USDC settle through a deployed Worker + independent payer | **Not yet** — this starter is v2 (`PAYMENT-REQUIRED` header, CAIP-2 network); the live mainnet settle proof that exists for the v1 sibling template (`x402-seller-starter`) has not been ported to v2 yet |
+| Full USDC settle through a deployed Worker + independent payer | **Proven** 2026-08-11 — see [Live example](#live-example-mainnet-v2) above (settlement tx independently re-verified against Solana mainnet RPC before this line was written) |
+| Settlement from an independent, externally-funded payer (not ops-funded) | **Not yet** — the live example's payer was ops-funded to prove the rail, not organic external demand |
 
 ## Defaults you get for free
 
