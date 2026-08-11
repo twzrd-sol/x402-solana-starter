@@ -20,7 +20,9 @@
     "test": "vitest run",
     "dev": "wrangler dev",
     "deploy": "npm run typecheck && npm test && wrangler deploy",
-    "dry-run": "npm run typecheck && wrangler deploy --dry-run"
+    "dry-run": "npm run typecheck && wrangler deploy --dry-run",
+    "smoke": "tsx scripts/smoke.mts",
+    "smoke:contrast": "bash scripts/contrast.sh"
   },
   "dependencies": {
     "@solana/kit": "^5.1.0",
@@ -32,6 +34,7 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^5.0.0",
     "@types/node": "^22.13.4",
+    "tsx": "^4.19.0",
     "typescript": "^5.8.0",
     "vitest": "^3.0.5",
     "wrangler": "^4.0.0"
@@ -50,7 +53,7 @@
     "docs_url": "https://intel.twzrd.xyz/llms.txt",
     "bindings": {
       "X402_PAY_TO": {
-        "description": "Your **Solana** public wallet address (base58) — where USDC payments land. Generate with any Solana wallet (Phantom, Solflare, etc.). Public address only; never a private key."
+        "description": "Your **Solana** public wallet address (base58) \u2014 where USDC payments land. Generate with any Solana wallet (Phantom, Solflare, etc.). Public address only; never a private key."
       }
     }
   }
