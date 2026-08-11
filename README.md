@@ -117,13 +117,19 @@ npm run pay -- \
   --keypair /path/to/funded.json
 ```
 
-Both payers accept a Solana `solana-keygen`-style 64-byte keypair JSON array,
-or an agentcash-style `{"privateKey": "<base58>"}` file (32-byte seed or
-64-byte secret key). Either one fails loudly on an unpaid `200` response
-rather than treating it as success — this starter has hit a transient
-Cloudflare edge-cache artifact that served a stale `200` for one request
-before self-correcting, and a payer script's job is to prove a real
-402→pay→settle round trip, not shrug at a free response.
+The two payers accept **different** keypair file formats — they are not
+drop-in replacements for each other:
+
+| Payer | Accepts |
+|---|---|
+| `pay_v2_solana.py` | JSON byte array only — 64-byte keypair, or 32-byte seed |
+| `pay_v2_solana.mts` (`npm run pay`) | 64-byte JSON byte array, **or** `{"privateKey": "<base58>"}` (32-byte seed or 64-byte secret key) |
+
+Both fail loudly on an unpaid `200` response rather than treating it as
+success — this starter has hit a transient Cloudflare edge-cache artifact
+that served a stale `200` for one request before self-correcting, and a
+payer script's job is to prove a real 402→pay→settle round trip, not shrug
+at a free response.
 
 Honest caveat: the demo payer was ops-funded to prove the rail, not organic external demand.
 
@@ -159,7 +165,8 @@ console.log(await res.json());
 | Unconfigured deploy refuses (`503`) instead of misrouting payment | **Proven** (`npm run smoke`) |
 | Settle guard screens payers via `merchant_card` before serving | **Proven** by unit test (`test/settle-guard.test.ts`), not yet by a live wash-flagged payer |
 | Full USDC settle through a deployed Worker, ops-funded payer | **Proven** 2026-08-11 — see [Live example](#live-example-mainnet-v2) above (settlement tx independently re-verified against Solana mainnet RPC before this line was written) |
-| Same settle from an externally-controlled / organic payer | **Not yet** — the live example's payer was ops-funded specifically to prove the rail; nobody outside TWZRD has paid this route yet |
+| Settle from a non-TWZRD-controlled operator environment (someone else deploys and runs this Worker independently) | **Not yet** |
+| Organic external demand (a real stranger pays, regardless of who operates the Worker) | **Not yet** — the live example's payer was ops-funded specifically to prove the rail |
 
 ## Defaults you get for free
 
