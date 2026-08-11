@@ -20,18 +20,22 @@
     "test": "vitest run",
     "dev": "wrangler dev",
     "deploy": "npm run typecheck && npm test && wrangler deploy",
-    "dry-run": "npm run typecheck && wrangler deploy --dry-run"
+    "dry-run": "npm run typecheck && wrangler deploy --dry-run",
+    "smoke": "tsx scripts/smoke.mts",
+    "smoke:contrast": "bash scripts/contrast.sh",
+    "pay": "tsx scripts/pay_v2_solana.mts"
   },
   "dependencies": {
     "@solana/kit": "^5.1.0",
-    "@x402/core": "^2.21.0",
-    "@x402/hono": "^2.21.0",
-    "@x402/svm": "^2.21.0",
+    "@x402/core": "^2.22.0",
+    "@x402/hono": "^2.22.0",
+    "@x402/svm": "^2.22.0",
     "hono": "^4.12.28"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^5.0.0",
     "@types/node": "^22.13.4",
+    "tsx": "^4.19.0",
     "typescript": "^5.8.0",
     "vitest": "^3.0.5",
     "wrangler": "^4.0.0"
