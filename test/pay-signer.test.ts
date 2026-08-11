@@ -151,4 +151,26 @@ describe("CLI entry (pay_v2_solana.mts as main module)", () => {
     expect(result.code).toBe(2);
     expect(result.stderr).toMatch(/usage:.*pay_v2_solana\.mts.*--url.*--keypair/i);
   });
+
+  it("exits 2 (not 0) when only --url is given and --keypair is missing", async () => {
+    // Complements the no-args case above: guards specifically against the
+    // silent-success failure mode the old isMainModule bug would produce
+    // (exit 0 with no output) for a *partially*-specified invocation, not
+    // just a fully empty one.
+    const { spawn } = await import("node:child_process");
+    const { fileURLToPath } = await import("node:url");
+    const script = fileURLToPath(new URL("../scripts/pay_v2_solana.mts", import.meta.url));
+
+    const result = await new Promise<{ code: number | null }>((resolve, reject) => {
+      const child = spawn("npx", ["tsx", script, "--url", "https://example.com/x"], {
+        cwd: fileURLToPath(new URL("..", import.meta.url)),
+        env: process.env,
+      });
+      child.on("error", reject);
+      child.on("close", (code) => resolve({ code }));
+    });
+
+    expect(result.code).toBe(2);
+    expect(result.code).not.toBe(0);
+  });
 });
