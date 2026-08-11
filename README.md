@@ -2,9 +2,13 @@
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/twzrd-sol/x402-solana-starter)
 
-**Sell one API route to AI agents on Solana in about 10 minutes.** A minimal
-Cloudflare Worker that speaks [x402](https://x402.org) **v2** — HTTP `402
-Payment Required` + **USDC on Solana mainnet** — with:
+**Role: production Solana storefront (x402 v2).**  
+For a **minimal CF-tutorial wedge** (`x402-hono` v1 middleware + one-line facilitator swap), see
+[x402-seller-starter](https://github.com/twzrd-sol/x402-seller-starter).
+
+**Sell one API route to AI agents on Solana in about 10 minutes.** A Cloudflare
+Worker that speaks [x402](https://x402.org) **v2** — HTTP `402 Payment Required`
++ **USDC on Solana mainnet** — with:
 
 | Pre-wired default | Why |
 |---|---|
@@ -60,13 +64,62 @@ npm run deploy
 Open the printed `workers.dev` URL. `curl -si <url>/report` should return
 **402** with a `PAYMENT-REQUIRED:` header (v2 challenge) and body `{}`.
 
-## Buy the route (smoke)
-
-Any x402-compatible Solana client works. With stock PayAI client + TWZRD gate
-on the **buyer** side (optional but recommended):
+## Verify before you trust it (smoke + wedge)
 
 ```bash
-npm i x402-solana@2.1.0 twzrd-x402-gate@0.8.13
+npm install
+npm test                 # offline unit tests
+npm run smoke            # in-process 402 against live TWZRD facilitator
+npm run smoke:contrast   # TWZRD must PASS; x402.org must FAIL for mainnet Solana
+```
+
+What smoke asserts (v2-native):
+
+| Check | Expected |
+|---|---|
+| Free `/` + `/health` | 200 |
+| Unpaid `/report` | **402**, body `{}`, challenge in `PAYMENT-REQUIRED` |
+| Network | CAIP-2 `solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp` (mainnet) |
+| feePayer | Present (TWZRD `4LkEFj…` when facilitator is intel) |
+| Unset `X402_PAY_TO` | **503** `payments_not_configured` |
+
+`smoke:contrast` proves the wedge: stock `https://x402.org/facilitator` has no
+Solana **mainnet** kind, so the storefront cannot sell — TWZRD can.
+
+### Settlement runbook (after deploy)
+
+1. Deploy with a real `X402_PAY_TO` secret.
+2. Confirm `curl -si https://YOUR.workers.dev/report` → **402** + `PAYMENT-REQUIRED`.
+3. Pay with any Solana x402 v2 client (example below). Expect **200** body + settlement evidence.
+4. Confirm on-chain USDC transfer to `X402_PAY_TO`.
+
+### Live example (mainnet, v2)
+
+Deployed and settling (not only simulated):
+
+```bash
+curl -si https://x402-solana-starter.fp4b5ksccw.workers.dev/report
+# HTTP/1.1 402 + PAYMENT-REQUIRED header; body {}
+```
+
+Settlement tx (Solana mainnet, **$0.01** USDC):  
+[`4Hbk81j3ktb3yW47Ts7gHT6JermWmAJaNW61VxdM4Z6frJKwPF5WcirWCuJxdUymD9syQvPLDQ9X9YVpKnYxdEoJ`](https://explorer.solana.com/tx/4Hbk81j3ktb3yW47Ts7gHT6JermWmAJaNW61VxdM4Z6frJKwPF5WcirWCuJxdUymD9syQvPLDQ9X9YVpKnYxdEoJ)
+
+```bash
+python3 scripts/pay_v2_solana.py \
+  --url https://x402-solana-starter.fp4b5ksccw.workers.dev/report \
+  --keypair /path/to/funded.json
+```
+
+Honest caveat: the demo payer was ops-funded to prove the rail, not organic external demand.
+
+## Buy the route
+
+Any x402-compatible Solana client works. With stock PayAI client + TWZRD gate
+on the **buyer** side (optional but recommended — Path B refuse-before-sign):
+
+```bash
+npm i x402-solana@2.1.0 twzrd-x402-gate@0.8.14
 ```
 
 ```ts
@@ -82,6 +135,16 @@ const client = createX402Client({
 const res = await client.fetch("https://YOUR_WORKER.workers.dev/report");
 console.log(await res.json());
 ```
+
+## What is proven vs not
+
+| Claim | Status |
+|-------|--------|
+| Challenge construction end-to-end (v2, CAIP-2 Solana mainnet) via TWZRD facilitator | **Proven** (`npm run smoke`) |
+| Stock `x402.org/facilitator` cannot supply a feePayer for Solana mainnet | **Proven** (`npm run smoke:contrast`) |
+| Unconfigured deploy refuses (`503`) instead of misrouting payment | **Proven** (`npm run smoke`) |
+| Settle guard screens payers via `merchant_card` before serving | **Proven** by unit test (`test/settle-guard.test.ts`), not yet by a live wash-flagged payer |
+| Full USDC settle through a deployed Worker + independent payer | **Not yet** — this starter is v2 (`PAYMENT-REQUIRED` header, CAIP-2 network); the live mainnet settle proof that exists for the v1 sibling template (`x402-seller-starter`) has not been ported to v2 yet |
 
 ## Defaults you get for free
 
@@ -126,6 +189,13 @@ console.log(await res.json());
 The Deploy button pattern is identical on Vercel and Railway — same public
 repo, different button URL. This Worker is the Cloudflare seat; the payment
 surface is plain HTTP 402 and can sit behind any edge runtime that runs Hono.
+
+## Related starters
+
+| Repo | Role | Stack |
+|---|---|---|
+| **This repo** | Full Solana storefront | `@x402/hono` + `@x402/svm` v2 + settle-guard |
+| [x402-seller-starter](https://github.com/twzrd-sol/x402-seller-starter) | Minimal CF-tutorial wedge | `x402-hono` v1 + facilitator URL only |
 
 ## Links
 
