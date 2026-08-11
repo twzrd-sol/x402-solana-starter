@@ -6,6 +6,7 @@ import {
   parseArgs,
 } from "../scripts/pay_v2_solana.mts";
 
+// PUBLIC TEST FIXTURE ONLY — never fund this address.
 // A fixed, known-good 64-byte solana-keygen-style secret key (private key
 // half + public key half concatenated), generated once and verified to
 // derive address 9rcNJADJPsqskszYGeHtyaF2dVwMEQTczBg8xgKwpA9v via both
@@ -13,7 +14,8 @@ import {
 // createKeyPairSignerFromPrivateKeyBytes (32-byte seed form) before being
 // hardcoded here, so tests are deterministic instead of depending on the
 // crypto RNG each run - and so this fixture is provably a real, valid
-// keypair rather than arbitrary-looking bytes.
+// keypair rather than arbitrary-looking bytes. Committed in a public
+// repo: treat as burn-only; any SOL/USDC sent here is permanently lost.
 const SECRET_KEY_64 = new Uint8Array([
   146, 188, 84, 19, 150, 155, 115, 54, 113, 219, 46, 65, 133, 228, 49, 226, 57,
   76, 65, 49, 202, 54, 112, 109, 13, 240, 175, 186, 44, 75, 100, 24, 131, 146,
@@ -111,5 +113,42 @@ describe("parseArgs", () => {
   it("returns null when a required flag is missing", () => {
     expect(parseArgs(["--url", "https://example.com/report"])).toBeNull();
     expect(parseArgs([])).toBeNull();
+  });
+});
+
+describe("CLI entry (pay_v2_solana.mts as main module)", () => {
+  it("prints usage and exits 2 when run with no arguments", async () => {
+    // Spawns the real entrypoint (same path as `npm run pay`) so the
+    // pathToFileURL isMainModule guard is exercised, not just parseArgs.
+    // If the guard silently fails (old file:// + argv[1] form on Windows /
+    // spaced paths), this process would exit 0 with empty stderr and the
+    // test would catch it.
+    const { spawn } = await import("node:child_process");
+    const { fileURLToPath } = await import("node:url");
+    const script = fileURLToPath(new URL("../scripts/pay_v2_solana.mts", import.meta.url));
+
+    const result = await new Promise<{
+      code: number | null;
+      stdout: string;
+      stderr: string;
+    }>((resolve, reject) => {
+      const child = spawn("npx", ["tsx", script], {
+        cwd: fileURLToPath(new URL("..", import.meta.url)),
+        env: process.env,
+      });
+      let stdout = "";
+      let stderr = "";
+      child.stdout.on("data", (chunk: Buffer) => {
+        stdout += chunk.toString();
+      });
+      child.stderr.on("data", (chunk: Buffer) => {
+        stderr += chunk.toString();
+      });
+      child.on("error", reject);
+      child.on("close", (code) => resolve({ code, stdout, stderr }));
+    });
+
+    expect(result.code).toBe(2);
+    expect(result.stderr).toMatch(/usage:.*pay_v2_solana\.mts.*--url.*--keypair/i);
   });
 });

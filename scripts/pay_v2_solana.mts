@@ -25,6 +25,7 @@
  *   object form. The two are not drop-in replacements for each other.)
  */
 import { readFileSync } from "node:fs";
+import { pathToFileURL } from "node:url";
 import { x402Client, x402HTTPClient } from "@x402/core/client";
 import { registerExactSvmScheme } from "@x402/svm/exact/client";
 import {
@@ -167,7 +168,14 @@ async function main() {
 // when imported for its exported functions (e.g. from the test suite) -
 // otherwise importing this module for testing would try to parse
 // process.argv as CLI args and exit(2).
-const isMainModule = import.meta.url === `file://${process.argv[1]}`;
+//
+// Use pathToFileURL so the comparison is portable: raw `file://${argv[1]}`
+// breaks on Windows (drive letters / backslashes) and on any path that
+// needs URL encoding (spaces, non-ASCII). In those environments the guard
+// would silently stay false and `npm run pay` would exit 0 without running.
+const isMainModule =
+  process.argv[1] !== undefined &&
+  import.meta.url === pathToFileURL(process.argv[1]).href;
 if (isMainModule) {
   main().catch((err) => {
     console.error("FAILED:", err instanceof Error ? err.message : err);
