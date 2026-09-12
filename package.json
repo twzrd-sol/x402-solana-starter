@@ -30,7 +30,7 @@
     "@x402/core": "^2.22.0",
     "@x402/hono": "^2.22.0",
     "@x402/svm": "^2.22.0",
-    "hono": "^4.12.28"
+    "hono": "^4.13.7"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^5.0.0",
