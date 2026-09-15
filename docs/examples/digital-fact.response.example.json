@@ -1,0 +1,30 @@
+{
+  "schema": "x402.digital_fact.v1",
+  "fact_id": "migrate-x402-v2",
+  "source": {
+    "url": "https://docs.x402.org/guides/migration-v1-to-v2.md",
+    "title": "Migration Guide: V1 to V2",
+    "content_type": "text/markdown",
+    "content_bytes": 16388,
+    "origin_body_sha256": "15bd7640b4031a347a44c74988cb6fcb30f42451c9860e57fd8fb0fa5e189a3f"
+  },
+  "results": [
+    {
+      "fact_id": "migrate-x402-v2",
+      "field": "contains",
+      "op": "eq",
+      "target": "PAYMENT-RESPONSE",
+      "result": "pass",
+      "span_start": 758,
+      "span_end": 774
+    },
+    {
+      "fact_id": "migrate-x402-v2-signature",
+      "field": "contains",
+      "op": "eq",
+      "target": "PAYMENT-SIGNATURE",
+      "result": "unknown",
+      "code": "not_found"
+    }
+  ]
+}
