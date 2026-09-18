@@ -28,6 +28,12 @@ One paid route (`GET /report`, **$0.01 USDC**, Solana mainnet) plus free
 discovery. Swap `/report` for whatever you're selling — price, path, and
 handler live in `src/resources.ts` + `src/index.ts`.
 
+The proposed frozen digital-fact experiment is specified in the
+[endpoint contract](docs/digital-fact-contract.md) and
+[buyer verification state machine](docs/digital-atom-buyer.md). These are
+drafts; the running SKU remains `/report`, and no digital-atom mainnet proof
+is claimed yet.
+
 ## Deploy
 
 ### One-click
