@@ -145,7 +145,7 @@ Any x402-compatible Solana client works. With stock PayAI client + TWZRD gate
 on the **buyer** side (optional but recommended — Path B refuse-before-sign):
 
 ```bash
-npm i x402-solana@3.0.0 twzrd-x402-gate@0.9.12
+npm i x402-solana@3.0.0 twzrd-x402-gate@0.9.13
 ```
 
 ```ts
