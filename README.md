@@ -145,7 +145,7 @@ Any x402-compatible Solana client works. With stock PayAI client + TWZRD gate
 on the **buyer** side (optional but recommended — Path B refuse-before-sign):
 
 ```bash
-npm i x402-solana@3.0.0 twzrd-x402-gate@0.9.7
+npm i x402-solana@3.0.0 twzrd-x402-gate@0.9.12
 ```
 
 ```ts
@@ -161,6 +161,12 @@ const client = createX402Client({
 const res = await client.fetch("https://YOUR_WORKER.workers.dev/report");
 console.log(await res.json());
 ```
+
+The hook refuses before signing when the seller's `payTo` is wash-flagged. From
+gate 0.9.12 it also **fails closed**: if the TWZRD intel lookup is unreachable,
+the payment aborts (`twzrd_card_unreachable_fail_closed`) instead of going
+through. 0.9.7 let it through. To keep paying while the gate is down, set
+`TWZRD_FAIL_OPEN=true`.
 
 ## What is proven vs not
 
