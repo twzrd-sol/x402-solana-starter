@@ -145,7 +145,7 @@ Any x402-compatible Solana client works. With stock PayAI client + TWZRD gate
 on the **buyer** side (optional but recommended — Path B refuse-before-sign):
 
 ```bash
-npm i x402-solana@3.0.0 twzrd-x402-gate@0.9.13
+npm i x402-solana@3.0.0 twzrd-x402-gate@0.11.2
 ```
 
 ```ts
@@ -167,6 +167,13 @@ gate 0.9.12 it also **fails closed**: if the TWZRD intel lookup is unreachable,
 the payment aborts (`twzrd_card_unreachable_fail_closed`) instead of going
 through. 0.9.7 let it through. To keep paying while the gate is down, set
 `TWZRD_FAIL_OPEN=true`.
+
+**A Worker you just deployed is a seller TWZRD has never evaluated.** From gate
+0.11.0 a buyer's hook pays such a seller up to the card's cap (currently $0.10 per
+call), so this template's `$0.01` route is payable on day one. A route priced
+above the cap is refused (`twzrd_unevaluated_over_cap_…`). Gates before 0.11.0
+refused every never-evaluated seller. From 0.11.1 an offer naming a non-USDC
+asset is refused (`twzrd_non_usdc_asset`); keep `USDC` as the asset.
 
 ## What is proven vs not
 
