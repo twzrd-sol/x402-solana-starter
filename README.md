@@ -291,3 +291,7 @@ surface is plain HTTP 402 and can sit behind any edge runtime that runs Hono.
 ## License
 
 MIT
+
+## Example: check, then pay
+
+[`examples/check-then-pay`](examples/check-then-pay) runs one x402 payment on Solana with a free pre-sign check first, then reads the finalized transaction back. `--dry-run` needs no wallet and signs nothing.

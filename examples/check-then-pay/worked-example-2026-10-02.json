@@ -1,0 +1,158 @@
+{
+  "title": "TWZRD loop proof: claim checked before, Solana settlement witnessed after",
+  "as_of": "2026-10-02T17:35:00Z",
+  "framing": "Self-funded house run (0.0022 USDC total, from TWZRD's proof-payer wallet 64NsKhbNGZCEj6sgTtjzscfuXSZSEpD1GoBXbT45yv4J). Proves mechanics end to end, not market demand.",
+  "stack": {
+    "client": "@x402/core 2.28 x402Client + @x402/svm ExactSvmScheme (official x402 v2)",
+    "gate": "twzrd-x402-gate 0.11.4 createGuardedX402Fetch (allowedRecipients, maxPricePerCall, TWZRD pre-sign hook: gateOnCanSpend, refuseWashFlagged)",
+    "sellers_from": "GET https://intel.twzrd.xyz/v1/intel/resources (live_402, Solana, exact price)"
+  },
+  "runs": [
+    {
+      "resource_url": "https://2s-rjsw718bb-alleyford.vercel.app/api/space/satellites",
+      "seller_pay_to": "TW6ntaGzvj63ZgPjszd4FCGmVTGfzv1MAYZbjYcyWhn",
+      "run_started_at": "2026-10-02T17:24:50.468Z",
+      "before": {
+        "check": "twzrd-x402-gate 0.11.4 pre-sign hook (free): preflight + merchant card + readiness, recipient pinned to the checked payTo, per-call cap 0.01 USDC",
+        "twzrd_verdict": [
+          [
+            "allow",
+            "twzrd_allow"
+          ]
+        ],
+        "selected_requirement": {
+          "scheme": "exact",
+          "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+          "amount": "1200",
+          "payTo": "TW6ntaGzvj63ZgPjszd4FCGmVTGfzv1MAYZbjYcyWhn",
+          "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+          "feePayer": "GVJJ7rdGiXr5xaYbRwRbjfaJL7fmwRygFi1H6aGqDveb",
+          "maxTimeoutSeconds": 60
+        }
+      },
+      "pay": {
+        "seller_http_status": 200,
+        "seller_body_sha256": "sha256:1a0710dfa243415b83f8c7f703cc202a8fd34e6a02c6f86f10f4876bba793bb4",
+        "payment_response": {
+          "success": true,
+          "transaction": "2Q9bKGjVZ5fbfTtcSpV5KyvAGKQpqB3G7QKDFKZfSz2mr3d1JT4DbU4iuqcJhupF8MVJKgh7K3g8j921EQcFhFbP",
+          "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+          "payer": null
+        }
+      },
+      "after": {
+        "chain": {
+          "slot": 452676779,
+          "block_time": 1790961891,
+          "wire_sha256": "sha256:0a04bed3946f3a6b30d6dbe8c0c3980c2152f3fa5d85c49f166f20a5ececacb5",
+          "err": null,
+          "digest_over": "sha256 of the base64-decoded wire transaction from getTransaction(encoding=base64, commitment=finalized)",
+          "independent_decode": {
+            "fee_payer": "GVJJ7rdGiXr5xaYbRwRbjfaJL7fmwRygFi1H6aGqDveb (facilitator)",
+            "instruction": "spl-token transferChecked 1200 atomic USDC, authority 64NsKhbN\u2026",
+            "seller_usdc_balance": "3.69778 -> 3.69898",
+            "payer_usdc_balance": "0.7375 -> 0.7363",
+            "fee_lamports": 10001
+          }
+        },
+        "twzrd_hosted_witness_route": {
+          "http_status": 404,
+          "meaning": "GET /v1/receipts/by-tx/{sig}/witness serves only settlements TWZRD itself facilitated; a third-party seller's settlement is not there"
+        },
+        "twzrd_corpus_ingest": {
+          "facilitator_id": "coinbase",
+          "payer": "64NsKhbN\u2026",
+          "merchant": "TW6ntaGz\u2026",
+          "usdc_amount_micro": 1200,
+          "block_time": "2026-10-02T17:24:51Z",
+          "received_at": "2026-10-02T17:24:54.519Z",
+          "ingest_lag_seconds": 3.5,
+          "path": "TWZRD's x402 ingest ledger, real-time webhook path (not the batch reconciler)",
+          "ledger": "TWZRD x402 settlement ingest"
+        }
+      },
+      "outcome": {
+        "kind": "paid_and_delivered_http_200"
+      }
+    },
+    {
+      "resource_url": "https://api.bitrefill.com/x402/checkout/info",
+      "seller_pay_to": "5yASLjtNssGXDv6bR9e71WXKxRymDiUzbgkGPqkQNgRn",
+      "run_started_at": "2026-10-02T17:27:08.940Z",
+      "before": {
+        "check": "twzrd-x402-gate 0.11.4 pre-sign hook (free): preflight + merchant card + readiness, recipient pinned to the checked payTo, per-call cap 0.01 USDC",
+        "twzrd_verdict": [
+          [
+            "allow",
+            "twzrd_allow"
+          ]
+        ],
+        "selected_requirement": {
+          "scheme": "exact",
+          "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+          "amount": "1000",
+          "payTo": "5yASLjtNssGXDv6bR9e71WXKxRymDiUzbgkGPqkQNgRn",
+          "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+          "feePayer": "BENrLoUbndxoNMUS5JXApGMtNykLjFXXixMtpDwDR9SP",
+          "maxTimeoutSeconds": 300
+        }
+      },
+      "pay": {
+        "seller_http_status": 200,
+        "seller_body_sha256": "sha256:72017bd55c1be53f71b71ff9f329df598efb2956e09d6cbdd85b855c2f8c484c",
+        "payment_response": {
+          "success": true,
+          "transaction": "3tmjNo7nJjJVFS4WepqjiHugNCnochSkgcXamdruRgEJ6s1DVZ3Fnn9M3op4vYsAzu6H9pGsetL8sCuYk2MhC1oi",
+          "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+          "payer": "64NsKhbNGZCEj6sgTtjzscfuXSZSEpD1GoBXbT45yv4J"
+        }
+      },
+      "after": {
+        "chain": {
+          "slot": 452677296,
+          "block_time": 1790962031,
+          "wire_sha256": "sha256:105a95b2db64a7c16f7a76b27990d3c61dde68b99bba61d8bf9e64a437afcf1f",
+          "err": null,
+          "digest_over": "sha256 of the base64-decoded wire transaction from getTransaction(encoding=base64, commitment=finalized)",
+          "independent_decode": {
+            "fee_payer": "BENrLoUbndxoNMUS5JXApGMtNykLjFXXixMtpDwDR9SP (facilitator)",
+            "instruction": "spl-token transferChecked 1000 atomic USDC, authority 64NsKhbN\u2026",
+            "seller_usdc_balance": "5000.0 -> 5000.001",
+            "payer_usdc_balance": "0.7363 -> 0.7353",
+            "fee_lamports": 10001
+          }
+        },
+        "twzrd_hosted_witness_route": {
+          "http_status": 404,
+          "meaning": "GET /v1/receipts/by-tx/{sig}/witness serves only settlements TWZRD itself facilitated; a third-party seller's settlement is not there"
+        },
+        "twzrd_corpus_ingest": {
+          "facilitator_id": "coinbase",
+          "payer": "64NsKhbN\u2026",
+          "merchant": "5yASLjtN\u2026",
+          "usdc_amount_micro": 1000,
+          "block_time": "2026-10-02T17:27:11Z",
+          "received_at": "2026-10-02T17:27:14.940Z",
+          "ingest_lag_seconds": 3.9,
+          "path": "TWZRD's x402 ingest ledger, real-time webhook path (not the batch reconciler)",
+          "ledger": "TWZRD x402 settlement ingest"
+        }
+      },
+      "outcome": {
+        "kind": "paid_and_delivered_http_200"
+      }
+    }
+  ],
+  "blocked_attempt": {
+    "run_started_at": "2026-10-02T17:25:24.865Z",
+    "resource_url": "https://api.bitrefill.com/x402/checkout/info",
+    "what_happened": "the gate refused fail-closed because its preflight call to intel timed out after 2000 ms; nothing was signed; a retry with the same default timeout passed (measured preflight latency right after: 0.15-0.32 s)",
+    "reason": "[twzrd] twzrd_fail_closed ([twzrd] preflight timed out after 2000ms) payTo=5yASLjtNssGXDv6bR9e71WXKxRymDiUzbgkGPqkQNgRn network=solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+  },
+  "what_this_does_and_does_not_show": [
+    "Shows: a free pre-spend check produced a verdict on the exact 402 requirement before any signer ran; a real USDC payment settled on Solana mainnet through the seller's facilitator; the seller returned 200; the settlement is finalized on chain and was recorded by TWZRD's x402 ingest within ~4 s.",
+    "Does not show: outside demand (the payer is TWZRD's own wallet); delivery quality beyond HTTP 200 and a body digest; a TWZRD-signed receipt about the settlement (the hosted by-tx witness covers only TWZRD-facilitated settlements, so for a third-party seller the chain itself plus the ingest row is the witness).",
+    "The hosted readiness card's maximum_recommended_spend_usdc for each resource equalled its listed price (0.0012 and 0.001); the gate's per-call cap was 0.01."
+  ],
+  "records": "one JSON per run, kept by TWZRD; this file is the summary"
+}
