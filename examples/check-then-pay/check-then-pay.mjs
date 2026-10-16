@@ -64,7 +64,7 @@ const record = {
   resource_url: args.url,
   expected_pay_to: args["pay-to"],
   max_usdc_per_call: String(MAX_USDC),
-  stack: { x402_core: "2.28", x402_svm: "2.28", twzrd_x402_gate: "0.11.4" },
+  stack: { x402_core: "2.28", x402_svm: "2.28", twzrd_x402_gate: "0.12.0" },
   twzrd_decisions: [],
   before: null,
   payment: null,
